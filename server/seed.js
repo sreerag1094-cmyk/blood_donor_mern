@@ -1,21 +1,37 @@
-import 'dotenv/config'
+import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import mongoose from 'mongoose'
 import dns from 'node:dns'
 import User from './models/User.js'
 import Donor from './models/Donor.js'
 
-dns.setServers(['8.8.8.8', '8.8.4.4'])
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+dotenv.config({ path: path.join(__dirname, '.env') })
+dotenv.config({ path: path.join(__dirname, '../.env') })
+dotenv.config()
+
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4'])
+} catch {}
 
 const email = process.env.ADMIN_EMAIL || 'admin@blooddonor.local'
 const password = process.env.ADMIN_PASSWORD || 'Admin@12345'
 
 await mongoose.connect(process.env.MONGO_URI)
 
-if (!(await User.findOne({ email }))) {
+const existingAdmin = await User.findOne({ email }).select('+password')
+if (!existingAdmin) {
   await User.create({ name: 'Administrator', email, password, role: 'admin' })
   console.log(`Admin created: ${email}`)
 } else {
-  console.log('Admin already exists')
+  existingAdmin.password = password
+  existingAdmin.role = 'admin'
+  existingAdmin.isBlocked = false
+  await existingAdmin.save()
+  console.log(`Admin updated and synced: ${email}`)
 }
 
 if ((await Donor.countDocuments()) === 0) {

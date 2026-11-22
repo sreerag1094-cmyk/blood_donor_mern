@@ -1,11 +1,15 @@
 {
   "name": "blood-donor-mern",
   "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "install:all": "npm install && npm install --prefix server && npm install --prefix client",
     "dev": "concurrently -n server,client -c red,blue \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "seed": "npm run seed --prefix server",
-    "build": "npm run build --prefix client"
+    "build": "npm run build --prefix client",
+    "start": "node server/server.js"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"

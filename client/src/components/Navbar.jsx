@@ -83,6 +83,20 @@ export default function Navbar() {
               <NavLink to="/login" className={link}>
                 Log in
               </NavLink>
+              <NavLink
+                to="/admin-login"
+                className={({ isActive }) =>
+                  `text-xs font-semibold px-2.5 py-1.5 rounded-xl border transition flex items-center gap-1 ${
+                    isActive
+                      ? 'border-slate-800 bg-slate-900 text-white font-bold'
+                      : 'border-slate-300 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-900'
+                  }`
+                }
+                title="Administrator Portal"
+              >
+                <span>🛡️</span>
+                <span>Admin</span>
+              </NavLink>
               <Link
                 to="/register"
                 className="rounded-xl bg-gradient-to-r from-red-600 to-rose-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-red-600/20 hover:from-red-700 hover:to-rose-700"
@@ -153,7 +167,7 @@ export default function Navbar() {
               Admin Dashboard
             </Link>
           )}
-          <div className="pt-2 border-t border-slate-100 flex gap-2">
+          <div className="pt-2 border-t border-slate-100 flex flex-col gap-2">
             {user ? (
               <button
                 onClick={() => {
@@ -167,19 +181,29 @@ export default function Navbar() {
               </button>
             ) : (
               <>
+                <div className="flex gap-2">
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 rounded-lg border border-slate-300 py-2 text-center text-xs font-semibold"
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 rounded-lg bg-red-600 py-2 text-center text-xs font-bold text-white"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
                 <Link
-                  to="/login"
+                  to="/admin-login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 rounded-lg border border-slate-300 py-2 text-center text-xs font-semibold"
+                  className="rounded-lg border border-slate-800 bg-slate-900 py-2 text-center text-xs font-bold text-white flex items-center justify-center gap-1.5"
                 >
-                  Log In
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 rounded-lg bg-red-600 py-2 text-center text-xs font-bold text-white"
-                >
-                  Sign Up
+                  <span>🛡️</span>
+                  <span>Admin Portal</span>
                 </Link>
               </>
             )}

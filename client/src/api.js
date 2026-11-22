@@ -1,4 +1,14 @@
-const BASE = import.meta.env.VITE_API_URL || '/api'
+let rawBase = import.meta.env.VITE_API_URL
+if (!rawBase) {
+  // In development, target the local backend port directly
+  rawBase = import.meta.env.DEV ? 'http://localhost:5000/api' : '/api'
+} else {
+  rawBase = rawBase.trim().replace(/\/+$/, '')
+  if (rawBase.startsWith('http') && !rawBase.endsWith('/api')) {
+    rawBase = `${rawBase}/api`
+  }
+}
+const BASE = rawBase
 
 export const getToken = () => localStorage.getItem('token')
 
@@ -7,11 +17,26 @@ async function request(method, path, body) {
   const token = getToken()
   if (token) headers.Authorization = `Bearer ${token}`
 
-  const res = await fetch(`${BASE}${path}`, {
-    method,
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
-  })
+  let res
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+    })
+  } catch (err) {
+    // If direct connection fails, attempt fallback to relative /api proxy
+    try {
+      res = await fetch(`/api${path}`, {
+        method,
+        headers,
+        body: body === undefined ? undefined : JSON.stringify(body),
+      })
+    } catch {
+      throw new Error('Server connection failed. Please ensure the backend server is running on port 5000.')
+    }
+  }
+
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
     const err = new Error(data.message || `Request failed (${res.status})`)

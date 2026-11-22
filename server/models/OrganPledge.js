@@ -39,6 +39,6 @@ const organPledgeSchema = new mongoose.Schema(
 )
 
 organPledgeSchema.index({ email: 1 })
-organPledgeSchema.index({ pledgeId: 1 })
+// organPledgeSchema.index({ pledgeId: 1 })
 
 export default mongoose.model('OrganPledge', organPledgeSchema)

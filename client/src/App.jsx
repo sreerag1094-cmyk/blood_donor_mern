@@ -12,7 +12,9 @@ import { useApp } from './context/AppContext'
 
 function Guard({ role, children }) { 
     const { user } = useApp(); 
-    if (!user) return <Navigate to="/login" replace />; 
+    if (!user) {
+      return <Navigate to={role === 'admin' ? '/admin-login' : '/login'} replace />;
+    }
     if (role && user.role !== role) return <Navigate to="/" replace />; 
     return children }
 
@@ -25,6 +27,8 @@ function Guard({ role, children }) {
             <Route path="/donors" element={<Donors />} />
             <Route path="/donors/:id" element={<DonorProfile />} />
             <Route path="/login" element={<Auth />} />
+            <Route path="/admin-login" element={<Auth mode="admin" />} />
+            <Route path="/admin/login" element={<Auth mode="admin" />} />
             <Route path="/register" element={<Auth mode="register" />} />
             <Route path="/donor" element={<Guard role="donor"><DonorDashboard /></Guard>} />
             <Route path="/admin" element={<Guard role="admin"><AdminDashboard /></Guard>} />

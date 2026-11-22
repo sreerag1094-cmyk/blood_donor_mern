@@ -221,6 +221,28 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Footer with Portal Links */}
+      <footer className="border-t border-slate-800 bg-slate-950 py-8 text-xs text-slate-400">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🩸</span>
+            <span className="font-bold text-white">LifeLink Blood & Organ Connect</span>
+            <span className="text-slate-600">•</span>
+            <span>Non-Profit & Humanitarian</span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4">
+            <Link to="/donors" className="hover:text-white transition">Find Donors</Link>
+            <Link to="/organ-donation" className="hover:text-white transition">Organ Pledge</Link>
+            <Link to="/login" className="hover:text-white transition">Donor Login</Link>
+            <Link to="/admin-login" className="flex items-center gap-1 font-semibold text-slate-300 hover:text-amber-400 transition">
+              <span>🛡️</span>
+              <span>Admin Portal</span>
+            </Link>
+          </div>
+        </div>
+      </footer>
     </main>
   )
 }

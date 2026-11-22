@@ -3,7 +3,7 @@ export const notFound = (req, res) => {
 }
 
 export const errorHandler = (err, _req, res, _next) => {
-  let status = err.status || 500
+  let status = err.status || err.statusCode || 500
   let message = err.message || 'Server error'
 
   if (err.name === 'ValidationError') {
